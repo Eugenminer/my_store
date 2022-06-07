@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 hello atom
+=======
+hello atom!!!
+>>>>>>> 6bb8fbb3d20684721fb062517dec37619b778398
