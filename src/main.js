@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import { data, text2 } from './data1';
-import aalleerrtt from './data2';
+import { data, text2 } from './var';
+import aalleerrtt from './func';
 
 createApp(App).mount('#app');
 
