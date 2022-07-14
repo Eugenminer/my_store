@@ -33,10 +33,19 @@
       <div id="slider" class="box">
         <div id="slider-holder">
           <ul>
-            <li><a href="#"><i class="none">!</i><img src="./Images/slide1.jpg" alt="" />1</a></li>
-            <li><a href="#"><i class="none">!</i><img src="./Images/slide1.jpg" alt="" />1</a></li>
-            <li><a href="#"><i class="none">!</i><img src="./Images/slide1.jpg" alt="" />1</a></li>
-            <li><a href="#"><i class="none">!</i><img src="./Images/slide1.jpg" alt="" />1</a></li>
+            <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/slide1.jpg" alt="" />
+              1
+            </a></li>
+            <li><a href="#"><i class="none">!</i><img src="./assets/Images/slide1.jpg" alt="" />
+              1
+            </a></li>
+            <li><a href="#"><i class="none">!</i><img src="./assets/Images/slide1.jpg" alt="" />
+              1
+            </a></li>
+            <li><a href="#"><i class="none">!</i><img src="./assets/Images/slide1.jpg" alt="" />
+              1
+            </a></li>
           </ul>
         </div>
         <div id="slider-nav">
@@ -47,7 +56,8 @@
       </div>
       <!-- End Content Slider -->
       <!-- Products -->
-      <ProductList></ProductList>
+      <ProductList :products="products"/>
+      <BasePagination v-model:page="page" :count="countProducts" :perPages="productNumOnPage" />
       <!-- End Products -->
     </div>
     <!-- End Content -->
@@ -114,28 +124,48 @@
     <div class="more-products">
       <div class="more-products-holder">
         <ul>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small1.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small2.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small3.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small4.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small5.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small6.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small7.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small1.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small2.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small3.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small4.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small5.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small6.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small7.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small1.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small2.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small3.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small4.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small5.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i><img src="./Images/small6.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small1.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small2.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small3.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small4.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small5.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small6.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small7.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small1.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small2.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small3.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small4.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small5.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small6.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small7.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small1.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small2.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small3.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small4.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small5.jpg" alt="" /></a></li>
+          <li><a href="#"><i class="none">!</i>
+            <img src="./assets/Images/small6.jpg" alt="" /></a></li>
           <li class="last"><a href="#"><i class="none">!</i>
-            <img src="./Images/small7.jpg" alt="" /></a></li>
+            <img src="./assets/Images/small7.jpg" alt="" /></a></li>
         </ul>
       </div>
       <div class="more-nav">
@@ -195,11 +225,30 @@
 
 <script>
 import ProductList from './components/ProductList.vue';
+import BasePagination from './components/BasePagination.vue';
+import products from './data/Products';
 
 export default {
   name: 'App',
   components: {
     ProductList,
+    BasePagination,
+  },
+  data() {
+    return {
+      page: 1,
+      productNumOnPage: 3,
+    };
+  },
+  computed: {
+    products() {
+      const startProduct = (this.page - 1) * this.productNumOnPage;
+      const endProduct = startProduct + this.productNumOnPage;
+      return products.slice(startProduct, endProduct);
+    },
+    countProducts() {
+      return products.length;
+    },
   },
 };
 </script>
@@ -207,7 +256,7 @@ export default {
 <style lang="stylus">
 * { padding:0; margin:0; outline:0; }
 body {
-background:#fff url(./Images/body.gif) repeat-x 0 0;
+background:#fff url(./assets/Images/body.gif) repeat-x 0 0;
 font-family: "Trebuchet MS", Arial, sans-serif;
 font-size:12px;
 line-height:16px;
@@ -236,11 +285,13 @@ h3 { font-size:12px; line-height:14px; text-transform: uppercase; color:#000; }
 h4 { font-size:12px; line-height:14px; text-transform: uppercase; color:#000; }
 
 h1#logo { font-size:0; line-height:0; width:156px; height:64px; float:left; }
-h1#logo a{ display:block; height:64px; text-indent: -4000px; background:url(./Images/logo.gif); }
+h1#logo a{
+  display:block; height:64px; text-indent: -4000px; background:url(./assets/Images/logo.gif);
+}
 
 .shell { width:960px; margin:0 auto; padding:10px; background:#fff; }
 
-#header { height:64px; background:url(./Images/header.gif); position:relative;}
+#header { height:64px; background:url(./assets/Images/header.gif); position:relative;}
 
 #navigation { float:right; white-space:nowrap; }
 #navigation ul{ list-style-type: none; height:64px; font-weight: bold; float:left;}
@@ -255,7 +306,7 @@ h1#logo a{ display:block; height:64px; text-indent: -4000px; background:url(./Im
   float:right; width:160px; top:0; right:0; height:51px; background:#8b0000;
   color:#fff; padding:13px 10px 0 10px; white-space:nowrap; line-height:20px;}
 a.cart-link {
-  color:#fff; background:url(./Images/cart-link.gif) no-repeat 0 0; padding:0 0 0 32px;
+  color:#fff; background:url(./assets/Images/cart-link.gif) no-repeat 0 0; padding:0 0 0 32px;
   text-decoration: none;}
 a.cart-link:hover { text-decoration: underline;}
 
@@ -269,11 +320,11 @@ a.cart-link:hover { text-decoration: underline;}
   background:#7f7f7f; color:#fff; font-weight: normal; padding:0 5px;
   position:relative; height:27px; line-height:27px; }
 .box h2 span{
-  position:absolute; width:10px; height:5px; background:url(./Images/h2-arr.gif);
+  position:absolute; width:10px; height:5px; background:url(./assets/Images/h2-arr.gif);
   top:27px; right:10px; font-size:0; line-height:0;}
 .box-content { padding:5px;}
 
-a.bul { background:url(./Images/bul.gif) no-repeat 0 center; padding-left:10px;}
+a.bul { background:url(./assets/Images/bul.gif) no-repeat 0 center; padding-left:10px;}
 
 .search { min-height:252px;}
 .search label { display:block; padding-bottom:3px; }
@@ -295,7 +346,7 @@ a.bul { background:url(./Images/bul.gif) no-repeat 0 center; padding-left:10px;}
 .categories ul li.last{ border-bottom:0; padding-bottom:0;}
 .categories ul li a{
   color:#5f5f5f; text-decoration: none;
-  background:url(./Images/cat.gif) no-repeat 0 4px; padding-left:17px;}
+  background:url(./assets/Images/cat.gif) no-repeat 0 4px; padding-left:17px;}
 .categories ul li a:hover{ color:#8b0000; }
 
 #slider { height:252px; position:relative; overflow:hidden; }
@@ -331,18 +382,18 @@ a.bul { background:url(./Images/bul.gif) no-repeat 0 center; padding-left:10px;}
 .more-nav { font-size:0; line-height:0;}
 .more-nav a{ position:absolute; top:40px; left:0; width:30px;
   height:32px; text-indent: -4000px; z-index:3;}
-.more-nav a.next{ background:url(./Images/next.gif); left:910px;}
-.more-nav a.prev{ background:url(./Images/prev.gif); left:20px;}
+.more-nav a.next{ background:url(./assets/Images/next.gif); left:910px;}
+.more-nav a.prev{ background:url(./assets/Images/prev.gif); left:20px;}
 
 .cols { padding:15px 0;}
 .col { float:left; display:inline; width:217px; margin-right:30px;}
 .col-last { margin-right:0;}
 
 h3.ico { background-repeat:no-repeat; background-position:0 2px; padding:6px 0 8px 30px;}
-h3.ico1 { background-image:url(./Images/ico1.gif);}
-h3.ico2 { background-image:url(./Images/ico2.gif);}
-h3.ico3 { background-image:url(./Images/ico3.gif);}
-h3.ico4 { background-image:url(./Images/ico4.gif);}
+h3.ico1 { background-image:url(./assets/Images/ico1.gif);}
+h3.ico2 { background-image:url(./assets/Images/ico2.gif);}
+h3.ico3 { background-image:url(./assets/Images/ico3.gif);}
+h3.ico4 { background-image:url(./assets/Images/ico4.gif);}
 
 #footer { height:51px; background:#ebebeb; white-space:nowrap;
   line-height:50px; padding:0 15px; color:#7b7b7b; margin-top:10px;}

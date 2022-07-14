@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import products from '@/data/Products';
 import ProductItem from './ProductItem.vue';
 
 export default {
@@ -18,12 +17,6 @@ export default {
   components: {
     ProductItem,
   },
-  props: {},
-  methods: {},
-  data() {
-    return {
-      products,
-    };
-  },
+  props: ['products'],
 };
 </script>

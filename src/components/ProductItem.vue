@@ -1,5 +1,5 @@
 <template>
-<li :class="classLast(isLastInLine)"><a href="#"><i class="none">!</i>
+<li :class="{'last': isLastInLine}"><a href="#"><i class="none">!</i>
   <img :src="product.image" alt="" /></a>
   <div class="product-info">
     <h3>LOREM IPSUM</h3>
@@ -25,14 +25,6 @@ export default {
       image: String,
     },
   },
-  methods: {
-    classLast(last) {
-      let clas = '';
-      if (last) clas = 'last';
-      else clas = '';
-      return clas;
-    },
-  },
 };
 </script>
 
@@ -48,7 +40,7 @@ export default {
 .product-info p{
   font-size:16px; line-height:18px; text-transform: uppercase;
   font-weight: bold; color:#000; padding:5px 0 7px 0;}
-.product-info .product-desc{ padding:10px; background:url(./Images/info.png); width:133px; }
+.product-info .product-desc{ padding:10px; background:url(../assets/Images/info.png); width:133px; }
 
 .price { display:block; font-size:21px; color:#8b0000; line-height:23px; }
 
