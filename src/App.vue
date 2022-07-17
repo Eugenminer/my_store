@@ -33,25 +33,25 @@
       <div id="slider" class="box">
         <div id="slider-holder">
           <ul>
-            <li><a href="#"><i class="none">!</i>
-            <img src="./assets/Images/slide1.jpg" alt="" />
-              1
+            <li><a href="#">
+              <div class="none">!</div><img src="./assets/Images/slide1.jpg" alt="" />
             </a></li>
-            <li><a href="#"><i class="none">!</i><img src="./assets/Images/slide1.jpg" alt="" />
-              1
+            <li><a href="#">
+              <div class="none">!</div><img src="./assets/Images/slide1.jpg" alt="" />
             </a></li>
-            <li><a href="#"><i class="none">!</i><img src="./assets/Images/slide1.jpg" alt="" />
-              1
+            <li><a href="#">
+              <div class="none">!</div><img src="./assets/Images/slide1.jpg" alt="" />
             </a></li>
-            <li><a href="#"><i class="none">!</i><img src="./assets/Images/slide1.jpg" alt="" />
-              1
+            <li><a href="#">
+              <div class="none">!</div><img src="./assets/Images/slide1.jpg" alt="" />
             </a></li>
           </ul>
         </div>
         <div id="slider-nav">
-          <a href="#" class="active">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a> <a href="#">4</a>
+          <a href="#" class="active"><div class="none">!</div></a>
+          <a href="#"><div class="none">!</div></a>
+          <a href="#"><div class="none">!</div></a>
+          <a href="#"><div class="none">!</div></a>
         </div>
       </div>
       <!-- End Content Slider -->
@@ -64,54 +64,11 @@
     <!-- Sidebar -->
     <div id="sidebar">
       <!-- Search -->
-      <div class="box search">
-        <h2>Search by <span></span></h2>
-        <div class="box-content">
-          <form action="#"  method="post">
-            Keyword
-            <input class="field" />
-            Category
-            <select class="field">
-              <option value="">-- Select Category --</option>
-            </select>
-            <div class="inline-field">
-              Price
-              <select class="field small-field">
-                <option value="">$10</option>
-              </select>
-              to:
-              <select class="field small-field">
-                <option value="">$50</option>
-              </select>
-            </div>
-            <input type="submit" class="search-submit" value="Search" />
-            <p> <a href="#" class="bul">Advanced search</a><br />
-              <a href="#" class="bul">Contact Customer Support</a> </p>
-          </form>
-        </div>
-      </div>
+      <ProductSearch v-model:category-id="filterCategoryId" v-model:price-from="filterPriceFrom"
+          v-model:price-to="filterPriceTo" v-model:key-word="filterKeyWord" />
       <!-- End Search -->
       <!-- Categories -->
-      <div class="box categories">
-        <h2>Categories <span></span></h2>
-        <div class="box-content">
-          <ul>
-            <li><a href="#">Category 1</a></li>
-            <li><a href="#">Category 2</a></li>
-            <li><a href="#">Category 3</a></li>
-            <li><a href="#">Category 4</a></li>
-            <li><a href="#">Category 5</a></li>
-            <li><a href="#">Category 6</a></li>
-            <li><a href="#">Category 7</a></li>
-            <li><a href="#">Category 8</a></li>
-            <li><a href="#">Category 9</a></li>
-            <li><a href="#">Category 10</a></li>
-            <li><a href="#">Category 11</a></li>
-            <li><a href="#">Category 12</a></li>
-            <li class="last"><a href="#">Category 13</a></li>
-          </ul>
-        </div>
-      </div>
+      <CategoriesList v-model:categoryId="filterCategoryId"/>
       <!-- End Categories -->
     </div>
     <!-- End Sidebar -->
@@ -124,47 +81,68 @@
     <div class="more-products">
       <div class="more-products-holder">
         <ul>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small1.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small2.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small3.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small4.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small5.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small6.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small7.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small1.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small2.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small3.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small4.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small5.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small6.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small7.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small1.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small2.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small3.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small4.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small5.jpg" alt="" /></a></li>
-          <li><a href="#"><i class="none">!</i>
+          <li><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small6.jpg" alt="" /></a></li>
-          <li class="last"><a href="#"><i class="none">!</i>
+          <li class="last"><a href="#">
+            <div class="none">!</div>
             <img src="./assets/Images/small7.jpg" alt="" /></a></li>
         </ul>
       </div>
@@ -226,28 +204,80 @@
 <script>
 import ProductList from './components/ProductList.vue';
 import BasePagination from './components/BasePagination.vue';
+import CategoriesList from './components/CategoriesList.vue';
+import ProductSearch from './components/ProductSearch.vue';
+
 import products from './data/Products';
+import categories from './data/Categories';
 
 export default {
   name: 'App',
   components: {
     ProductList,
     BasePagination,
+    CategoriesList,
+    ProductSearch,
+  },
+  watch: {
+    filterCategoryId() {
+      this.page = 1;
+    },
+    filterPriceFrom() {
+      this.page = 1;
+    },
+    filterPriceTo() {
+      this.page = 1;
+    },
+    filterKeyWord() {
+      this.page = 1;
+    },
+    productNumOnPage() {
+      this.page = 1;
+    },
   },
   data() {
     return {
+      filterPriceFrom: 0,
+      filterPriceTo: 0,
+      filterKeyWord: '',
+      filterCategoryId: 0,
       page: 1,
       productNumOnPage: 3,
     };
   },
   computed: {
-    products() {
-      const startProduct = (this.page - 1) * this.productNumOnPage;
-      const endProduct = startProduct + this.productNumOnPage;
-      return products.slice(startProduct, endProduct);
+    filterProducts() {
+      let result = products;
+      const filterKeyWord = this.filterKeyWord.toUpperCase();
+
+      if (this.filterPriceFrom) {
+        result = result.filter((p) => p.price >= this.filterPriceFrom);
+      }
+
+      if (this.filterPriceTo) {
+        result = result.filter((p) => p.price <= this.filterPriceTo);
+      }
+
+      if (this.filterCategoryId) {
+        result = result.filter((p) => p.categoryId === this.filterCategoryId);
+      }
+
+      if (this.filterKeyWord.length > 0) {
+        result = result.filter((p) => p.title.toUpperCase().includes(filterKeyWord));
+      }
+
+      return result;
     },
     countProducts() {
-      return products.length;
+      return this.filterProducts.length;
+    },
+    categories() {
+      return categories;
+    },
+    products() {
+      const end = this.productNumOnPage * this.page;
+      const begin = end - this.productNumOnPage;
+      return this.filterProducts.slice(begin, end);
     },
   },
 };
@@ -263,8 +293,6 @@ line-height:16px;
 color:#636363;
 }
 input, textarea, select { font-family: "Trebuchet MS", Arial, sans-serif; font-size:12px; }
-
-.field { background:#ebebeb; border:solid 1px #dedede; padding:2px;}
 
 a img { border:0; }
 
@@ -325,29 +353,6 @@ a.cart-link:hover { text-decoration: underline;}
 .box-content { padding:5px;}
 
 a.bul { background:url(./assets/Images/bul.gif) no-repeat 0 center; padding-left:10px;}
-
-.search { min-height:252px;}
-.search label { display:block; padding-bottom:3px; }
-
-.search .field { display:block; margin-bottom:10px; }
-.search .inline-field label { display:inline; padding:0; }
-.search .inline-field .field { display:inline; margin:0; }
-.search input.field { width:206px; }
-.search select.field { width:212px; }
-.search select.small-field { width:50px; }
-
-.search-submit {
-  width:70px; background:#8b0000; border:0; color:#fff; height:27px;
-  display:block; line-height:26px; cursor:pointer; margin:12px 0 10px 0;}
-
-.categories { min-height:383px; }
-.categories ul { list-style-type: none; font-size:13px;}
-.categories ul li{ border-bottom:dashed 1px #ccc; padding:5px 0;}
-.categories ul li.last{ border-bottom:0; padding-bottom:0;}
-.categories ul li a{
-  color:#5f5f5f; text-decoration: none;
-  background:url(./assets/Images/cat.gif) no-repeat 0 4px; padding-left:17px;}
-.categories ul li a:hover{ color:#8b0000; }
 
 #slider { height:252px; position:relative; overflow:hidden; }
 #slider-holder { width:720px; height:252px; position:relative; overflow:hidden; }

@@ -48,7 +48,7 @@ export default {
 .pageActive {
   position: relative;
   text-decoration: none;
-  cursor: none;
+  cursor: default;
   pointer-events: none;
   top: 3px;
   color: black;

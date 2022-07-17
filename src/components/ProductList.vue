@@ -3,7 +3,7 @@
   <div class="cl">&nbsp;</div>
   <ul>
     <ProductItem :isLastInLine="(index+1)%3 == 0"  v-for="(product, index) in products"
-      :key="'product' + index" :product="product"/>
+      :key="product.id" :product="product"/>
   </ul>
   <div class="cl">&nbsp;</div>
 </div>
