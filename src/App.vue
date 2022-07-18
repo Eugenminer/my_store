@@ -65,7 +65,8 @@
     <div id="sidebar">
       <!-- Search -->
       <ProductSearch v-model:category-id="filterCategoryId" v-model:price-from="filterPriceFrom"
-          v-model:price-to="filterPriceTo" v-model:key-word="filterKeyWord" />
+          v-model:price-to="filterPriceTo" v-model:key-word="filterKeyWord"
+          v-model:color-id="filterColorId" />
       <!-- End Search -->
       <!-- Categories -->
       <CategoriesList v-model:categoryId="filterCategoryId"/>
@@ -219,6 +220,9 @@ export default {
     ProductSearch,
   },
   watch: {
+    filterColorId() {
+      this.page = 1;
+    },
     filterCategoryId() {
       this.page = 1;
     },
@@ -241,6 +245,7 @@ export default {
       filterPriceTo: 0,
       filterKeyWord: '',
       filterCategoryId: 0,
+      filterColorId: 0,
       page: 1,
       productNumOnPage: 3,
     };
@@ -264,6 +269,11 @@ export default {
 
       if (this.filterKeyWord.length > 0) {
         result = result.filter((p) => p.title.toUpperCase().includes(filterKeyWord));
+      }
+
+      if (this.filterColorId > 0) {
+        result = result.filter((p) => p.colors.find((el) => el.id === this.filterColorId)
+          !== undefined);
       }
 
       return result;

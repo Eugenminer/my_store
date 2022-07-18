@@ -8,6 +8,18 @@
       <strong class="price">${{product.price}}</strong>
     </div>
   </div>
+  <div class="product-colors">
+    <ul class="colors colors--black">
+      <li class="colors__item" v-for="color in product.colors" :key="product.id + '_' + color.id">
+        <label class="colors__label" :for="product.id + '_' + color.id">
+          <input class="colors__radio sr-only" :id="product.id + '_' + color.id" type="radio"
+            :name="'colorProduct' + product.id" :value="color.id">
+          <span class="colors__value" :style="{backgroundColor: color.code,}">
+          </span>
+        </label>
+      </li>
+    </ul>
+  </div>
 </li>
 </template>
 
@@ -43,6 +55,9 @@ export default {
 .product-info .product-desc{ padding:10px; background:url(../assets/Images/info.png); width:133px; }
 
 .price { display:block; font-size:21px; color:#8b0000; line-height:23px; }
+
+.product-colors{ display: inline; position:absolute; height: 30px; width:100%; top:90%; left:10px;}
+.product-colors ul li{display: inline; border-style: none; height: 30px; width:30px;}
 
 .none {display: none;}
 </style>
