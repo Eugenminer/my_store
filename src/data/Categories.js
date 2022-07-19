@@ -1,18 +1,18 @@
 export default [
   {
     id: 0,
-    title: '-- No Select --',
+    title: '-- Не выбрано --',
   },
   {
     id: 1,
-    title: 'Winter',
+    title: 'Зима',
   },
   {
     id: 2,
-    title: 'Spring/Autumn',
+    title: 'Демисезон',
   },
   {
     id: 3,
-    title: 'Summer',
+    title: 'Лето',
   },
 ];
