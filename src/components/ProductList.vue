@@ -2,7 +2,8 @@
 <section class="catalog">
   <ul class="catalog__list">
     <ProductItem :isLastInLine="(index+1)%3 == 0"  v-for="(product, index) in products"
-      :key="product.id" :product="product"/>
+      :key="product.id" :product="product"
+      @gotoPage="(pageName, pageParams) => $emit('gotoPage', pageName, pageParams)" />
   </ul>
   <BasePagination v-model:page="currentPage" :count="count" :perPages="perPages" />
 </section>

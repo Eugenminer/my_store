@@ -1,6 +1,6 @@
 <template>
 <li class="catalog__item">
-  <a class="catalog__pic" href="#">
+  <a class="catalog__pic" href="#" @click.prevent="$emit('gotoPage', 'product', {id: product.id})">
     <img :src="product.image" srcset="{{product.image}} 2x" alt="{{product.title}}">
   </a>
 
@@ -11,7 +11,7 @@
   </h3>
 
   <span class="catalog__price">
-    {{product.price}} ₽
+    {{formatPrice}} ₽
   </span>
 
   <ul class="colors colors--black">
@@ -28,17 +28,17 @@
 </template>
 
 <script>
+import numberFormat from '@/helpers/numberFormat';
+
 export default {
   name: 'ProductItem',
   components: {
 
   },
-  props: {
-    isLastInLine: Boolean,
-    product: {
-      title: String,
-      price: Number,
-      image: String,
+  props: ['product'],
+  computed: {
+    formatPrice() {
+      return numberFormat(this.product.price);
     },
   },
 };

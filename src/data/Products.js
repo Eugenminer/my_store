@@ -19,7 +19,7 @@ export default [
     id: 3,
     categoryId: 1,
     title: 'Jacket Like',
-    price: 103.45,
+    price: 1033.45,
     image: 'img/big3.jpg',
     colors: [{ id: 4, code: '#070' }, { id: 5, code: '#007' }, { id: 6, code: '#707' }],
   },
