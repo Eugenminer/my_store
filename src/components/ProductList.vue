@@ -24,6 +24,9 @@ export default {
     currentPage(value) {
       this.$emit('update:page', value);
     },
+    page(value) {
+      this.currentPage = value;
+    },
   },
   data() {
     return {
