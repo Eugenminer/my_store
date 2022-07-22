@@ -1,6 +1,6 @@
 <template>
 <li class="catalog__item">
-  <a class="catalog__pic" href="#" @click.prevent="$emit('gotoPage', 'product', {id: product.id})">
+  <a class="catalog__pic" href="#" @click.prevent="emit('gotoPage', 'product', {id: product.id})">
     <img :src="product.image" srcset="{{product.image}} 2x" alt="{{product.title}}">
   </a>
 
@@ -35,11 +35,22 @@ export default {
   components: {
 
   },
+  data() {
+    return {
+      a: 55,
+    };
+  },
   props: ['product'],
   computed: {
     formatPrice() {
       return numberFormat(this.product.price);
     },
   },
+  methods: {
+    emit(method, param1, param2) {
+      this.emitter.emit(method, { page: param1, parametrs: param2 });
+    },
+  },
 };
+
 </script>

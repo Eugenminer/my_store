@@ -4,13 +4,13 @@
     <ul class="breadcrumbs">
       <li class="breadcrumbs__item">
         <a class="breadcrumbs__link" href="index.html"
-          @click.prevent="$emit('gotoPage', 'main', {})">
+          @click.prevent="emit('gotoPage', 'main', {})">
           Каталог
         </a>
       </li>
       <li class="breadcrumbs__item">
         <a class="breadcrumbs__link" href="#"
-          @click.prevent="$emit('gotoPage', 'main', {})">
+          @click.prevent="emit('gotoPage', 'main', {})">
           {{ category.title }}
         </a>
       </li>
@@ -243,6 +243,11 @@ export default {
     },
     formatPrice() {
       return numberFormat(this.product.price);
+    },
+  },
+  methods: {
+    emit(method, param1, param2) {
+      this.emitter.emit(method, { page: param1, parametrs: param2 });
     },
   },
 };

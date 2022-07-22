@@ -13,8 +13,7 @@
     <ProductSearch v-model:category-id="filterCategoryId" v-model:price-from="filterPriceFrom"
         v-model:price-to="filterPriceTo" v-model:color-id="filterColorId" />
     <ProductList :products="products" v-model:page="page"
-      :count="countProducts" :perPages="productNumOnPage"
-      @gotoPage="(pageName, pageParams) => $emit('gotoPage', pageName, pageParams)" />
+      :count="countProducts" :perPages="productNumOnPage" />
   </div>
 </main>
 </template>

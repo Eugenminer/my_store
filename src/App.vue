@@ -1,6 +1,5 @@
 <template>
-  <component :is="currentPageComponent" :page-params="currentPageParams"
-    @gotoPage="(pageName, pageParams) => gotoPage(pageName, pageParams)" />
+  <component :is="currentPageComponent" :page-params="currentPageParams" />
 </template>
 
 <script>
@@ -34,6 +33,11 @@ export default {
     currentPageComponent() {
       return routing[this.currentPage] || 'NothingPage';
     },
+  },
+  mounted() {
+    this.emitter.on('gotoPage', (params) => {
+      this.gotoPage(params.page, params.parametrs);
+    });
   },
 };
 </script>
