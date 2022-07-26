@@ -3,16 +3,14 @@
   <div class="content__top">
     <ul class="breadcrumbs">
       <li class="breadcrumbs__item">
-        <a class="breadcrumbs__link" href="index.html"
-          @click.prevent="emit('gotoPage', 'main', {})">
+        <router-link class="breadcrumbs__link" :to="{ name: 'main' }">
           Каталог
-        </a>
+        </router-link>
       </li>
       <li class="breadcrumbs__item">
-        <a class="breadcrumbs__link" href="#"
-          @click.prevent="emit('gotoPage', 'main', {})">
+        <router-link class="breadcrumbs__link" :to="{ name: 'main' }">
           {{ category.title }}
-        </a>
+        </router-link>
       </li>
       <li class="breadcrumbs__item">
         <a class="breadcrumbs__link">
@@ -26,31 +24,31 @@
     <div class="item__pics pics">
       <div class="pics__wrapper">
         <img width="570" height="570" :src="product.image"
-          srcset="img/phone-square@2x.jpg 2x" :alt="product.title">
+         :alt="product.title">
       </div>
       <ul class="pics__list">
         <li class="pics__item">
           <a href="" class="pics__link pics__link--current">
             <img width="98" height="98" :src="product.image"
-              srcset="img/phone-square-1@2x.jpg 2x" :alt="product.title">
+            :alt="product.title">
           </a>
         </li>
         <li class="pics__item">
           <a href="" class="pics__link">
             <img width="98" height="98" :src="product.image"
-              srcset="img/phone-square-2@2x.jpg 2x" :alt="product.title">
+            :alt="product.title">
           </a>
         </li>
         <li class="pics__item">
           <a href="" class="pics__link">
             <img width="98" height="98" :src="product.image"
-              srcset="img/phone-square-3@2x.jpg 2x" :alt="product.title">
+            :alt="product.title">
           </a>
         </li>
         <li class="pics__item">
           <a class="pics__link" href="#">
             <img width="98" height="98" :src="product.image"
-              srcset="img/phone-square-4@2x.jpg 2x" :alt="product.title">
+            :alt="product.title">
           </a>
         </li>
       </ul>
@@ -62,7 +60,7 @@
         {{ product.title }}
       </h2>
       <div class="item__form">
-        <form class="form" action="#" method="POST">
+        <form class="form" action="#" method="POST" @submit.prevent="AddToCart">
           <b class="item__price">
             {{ formatPrice }} ₽
           </b>
@@ -132,17 +130,17 @@
 
           <div class="item__row">
             <div class="form__counter">
-              <button type="button" aria-label="Убрать один товар">
+              <button type="button" aria-label="Убрать один товар" @click="productAmount--">
                 <svg width="12" height="12" fill="currentColor">
                   <use xlink:href="#icon-minus"></use>
                 </svg>
               </button>
 
-              <label for="#">
-                <input type="text" value="1" name="count">
+              <label for="amount">
+                <input id="amount" type="text" v-model="productAmount" name="count">
               </label>
 
-              <button type="button" aria-label="Добавить один товар">
+              <button type="button" aria-label="Добавить один товар" @click="productAmount++">
                 <svg width="12" height="12" fill="currentColor">
                   <use xlink:href="#icon-plus"></use>
                 </svg>
@@ -233,10 +231,14 @@ import categories from '@/data/Categories';
 import numberFormat from '@/helpers/numberFormat';
 
 export default {
-  props: ['pageParams'],
+  data() {
+    return {
+      productAmount: 1,
+    };
+  },
   computed: {
     product() {
-      return products.find((el) => el.id === this.pageParams.id);
+      return products.find((el) => el.id === +this.$route.params.id);
     },
     category() {
       return categories.find((el) => el.id === this.product.categoryId);
@@ -246,8 +248,11 @@ export default {
     },
   },
   methods: {
-    emit(method, param1, param2) {
-      this.emitter.emit(method, { page: param1, parametrs: param2 });
+    AddToCart() {
+      this.$store.commit(
+        'addProductToCart',
+        { productId: this.product.id, amount: this.productAmount },
+      );
     },
   },
 };

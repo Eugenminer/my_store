@@ -1,8 +1,8 @@
 <template>
 <li class="catalog__item">
-  <a class="catalog__pic" href="#" @click.prevent="emit('gotoPage', 'product', {id: product.id})">
+  <router-link class="catalog__pic" :to="{ name: 'product', params: { id: product.id } }">
     <img :src="product.image" srcset="{{product.image}} 2x" alt="{{product.title}}">
-  </a>
+  </router-link>
 
   <h3 class="catalog__title">
     <a href="#">
@@ -44,11 +44,6 @@ export default {
   computed: {
     formatPrice() {
       return numberFormat(this.product.price);
-    },
-  },
-  methods: {
-    emit(method, param1, param2) {
-      this.emitter.emit(method, { page: param1, parametrs: param2 });
     },
   },
 };
