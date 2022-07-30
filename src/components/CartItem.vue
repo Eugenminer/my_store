@@ -30,9 +30,9 @@
 </template>
 
 <script>
+import AmountProduct from '@/components/AmountProduct.vue';
 import numberFormat from '@/helpers/numberFormat';
 import { mapActions } from 'vuex';
-import AmountProduct from '@/components/AmountProduct.vue';
 
 export default {
   components: {
