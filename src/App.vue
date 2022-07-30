@@ -116,10 +116,20 @@
 
 <script>
 import CatIndicator from '@/components/CatIndicator.vue';
+import { mapActions, mapMutations } from 'vuex';
 
 export default {
   components: {
     CatIndicator,
+  },
+  methods: {
+    ...mapActions(['loadCart']),
+    ...mapMutations(['updateUserAccessKey']),
+  },
+  created() {
+    const userAccessKey = localStorage.getItem('userAccessKey');
+    if (userAccessKey) this.updateUserAccessKey(userAccessKey);
+    this.loadCart();
   },
 };
 </script>

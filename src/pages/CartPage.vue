@@ -1,5 +1,8 @@
 <template>
-<main class="content container">
+<main class="content container" v-if="stateLoadingCart !== 'ready'">
+  <PreLoader :state="stateLoadingCart" @reload="loadCart" />
+</main>
+<main class="content container" v-else>
   <div class="content__top">
     <ul class="breadcrumbs">
       <li class="breadcrumbs__item">
@@ -49,21 +52,28 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import CartItem from '@/components/CartItem.vue';
 import numberFormat from '@/helpers/numberFormat';
+import PreLoader from '@/components/PreLoader.vue';
 
 export default {
   components: {
     CartItem,
+    PreLoader,
   },
   methods: {
+    ...mapActions(['loadCart']),
     formatPrice(price) {
       return numberFormat(price);
     },
   },
   computed: {
-    ...mapGetters({ products: 'cartDetailProducts', totalPrice: 'cartTotalPrice' }),
+    ...mapGetters({
+      products: 'cartDetailProducts',
+      totalPrice: 'cartTotalPrice',
+      stateLoadingCart: 'stateLoadingCart',
+    }),
   },
 };
 </script>

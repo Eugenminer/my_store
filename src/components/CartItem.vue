@@ -14,30 +14,14 @@
     Артикул: {{item.product.id}}
   </span>
 
-  <div class="product__counter form__counter">
-    <button type="button" aria-label="Убрать один товар" @click.prevent="amountItem--">
-      <svg width="10" height="10" fill="currentColor">
-        <use xlink:href="#icon-minus"></use>
-      </svg>
-    </button>
-
-    <label for="#">
-    <input type="text" v-model.number="amountItem" name="count">
-    </label>
-
-    <button type="button" aria-label="Добавить один товар" @click.prevent="amountItem++">
-      <svg width="10" height="10" fill="currentColor">
-        <use xlink:href="#icon-plus"></use>
-      </svg>
-    </button>
-  </div>
+  <AmountProduct size="10" v-model:amount="amountItem" />
 
   <b class="product__price">
     {{ formatPrice(item.product.price * item.amount) }} ₽
   </b>
 
   <button class="product__del button-del" type="button"
-  @click.prevent="deleteProduct(item.productId)" aria-label="Удалить товар из корзины">
+  @click.prevent="deleteProductFromCart(item.productId)" aria-label="Удалить товар из корзины">
     <svg width="20" height="20" fill="currentColor">
       <use xlink:href="#icon-close"></use>
     </svg>
@@ -47,11 +31,15 @@
 
 <script>
 import numberFormat from '@/helpers/numberFormat';
-import { mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
+import AmountProduct from '@/components/AmountProduct.vue';
 
 export default {
+  components: {
+    AmountProduct,
+  },
   methods: {
-    ...mapMutations({ changeAmount: 'changeAmountProduct', deleteProduct: 'deleteProductFromCart' }),
+    ...mapActions(['updateProductToCart', 'deleteProductFromCart']),
     formatPrice(price) {
       return numberFormat(price);
     },
@@ -62,7 +50,7 @@ export default {
         return this.item.amount;
       },
       set(value) {
-        this.changeAmount({ productId: this.item.productId, amount: value });
+        this.updateProductToCart({ productId: this.item.productId, amount: value });
       },
     },
   },

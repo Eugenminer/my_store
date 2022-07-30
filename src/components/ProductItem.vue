@@ -35,11 +35,6 @@ export default {
   components: {
 
   },
-  data() {
-    return {
-      a: 55,
-    };
-  },
   props: ['product'],
   computed: {
     formatPrice() {
