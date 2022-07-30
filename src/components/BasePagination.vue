@@ -55,7 +55,6 @@ export default {
   },
   methods: {
     paginate(page) {
-      if (page > 0 && page <= Math.ceil(this.count / this.perPages)) {
       if (page > 0 && page <= this.pages) {
         this.currentPage = page;
       }
