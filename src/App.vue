@@ -2,12 +2,14 @@
 <div>
   <header class="header">
     <div class="header__wrapper container">
-      <span class="header__info">Каталог</span>
+      <router-link class="header__info" :to="{ name: 'main' }">
+        Каталог
+      </router-link>
 
-      <a href="/" class="header__logo">
+      <router-link class="header__logo" :to="{ name: 'main' }">
         <img src="/img/svg/logo-tech.svg"
           alt="Логотип интернет магазина Технозавррр" width="190" height="33">
-      </a>
+      </router-link>
 
       <a class="header__tel" href="tel:8 800 600 90 09">
         8 800 600 90 09
@@ -116,10 +118,20 @@
 
 <script>
 import CatIndicator from '@/components/CatIndicator.vue';
+import { mapActions, mapMutations } from 'vuex';
 
 export default {
   components: {
     CatIndicator,
+  },
+  methods: {
+    ...mapActions(['loadCart']),
+    ...mapMutations(['updateUserAccessKey']),
+  },
+  created() {
+    const userAccessKey = localStorage.getItem('userAccessKey');
+    if (userAccessKey) this.updateUserAccessKey(userAccessKey);
+    this.loadCart();
   },
 };
 </script>

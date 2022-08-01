@@ -19,6 +19,9 @@
       <legend class="form__legend">Категория</legend>
       <label for="#" class="form__label form__label--select">
         <select class="form__select" type="text" name="category" v-model="currentCategoryId">
+          <option :value="0" key="0">
+            Все категории
+          </option>
           <option :value="category.id" v-for="category in categories" :key="category.id">
             {{category.title}}
           </option>
@@ -76,8 +79,8 @@
 </template>
 
 <script>
-import categories from '../data/Categories';
-import colors from '../data/Colors';
+import axios from 'axios';
+import API_BASE_URL from '@/config';
 
 export default {
   components: {
@@ -104,6 +107,8 @@ export default {
       currentPriceFrom: 0,
       currentPriceTo: 0,
       currentColorId: 0,
+      productCategories: null,
+      productColors: null,
     };
   },
   methods: {
@@ -124,14 +129,28 @@ export default {
       this.currentPriceTo = 0;
       this.currentColorId = 0;
     },
+    loadCategories() {
+      axios
+        .get(`${API_BASE_URL}/api/productCategories`)
+        .then((response) => { this.productCategories = response.data; });
+    },
+    loadColors() {
+      axios
+        .get(`${API_BASE_URL}/api/colors`)
+        .then((response) => { this.productColors = response.data; });
+    },
   },
   computed: {
     categories() {
-      return categories;
+      return this.productCategories ? this.productCategories.items : [];
     },
     colors() {
-      return colors;
+      return this.productColors ? this.productColors.items : [];
     },
+  },
+  created() {
+    this.loadCategories();
+    this.loadColors();
   },
 };
 </script>
