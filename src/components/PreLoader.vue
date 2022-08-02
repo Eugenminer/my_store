@@ -4,7 +4,7 @@
               <button @click.prevent="this.$emit('reload');" v-if="state == 'error'">
                 Попробовать<br>еще раз
               </button>
-              <div class="containerPreload" v-if="state == 'loading'">
+              <div :class="classPreload" v-if="state == 'loading'">
                 <div class="blockPreload"></div>
                 <div class="blockPreload"></div>
                 <div class="blockPreload"></div>

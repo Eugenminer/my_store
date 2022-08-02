@@ -33,10 +33,6 @@
 import AmountProduct from '@/components/AmountProduct.vue';
 import numberFormat from '@/helpers/numberFormat';
 import { mapActions } from 'vuex';
-<<<<<<< HEAD
-import AmountProduct from '@/components/AmountProduct.vue';
-=======
->>>>>>> 4042a5093979b29d5cf994a8f4899dc4762a861b
 
 export default {
   components: {
