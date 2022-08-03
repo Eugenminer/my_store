@@ -104,12 +104,8 @@ const store = createStore(
             .then((response) => {
               context.commit('updateOrderInfo', response.data);
             })
-            .catch(() => {
-              context.commit('updateOrderLoadingFailed', true);
-            })
-            .then(() => {
-              context.commit('updateOrderLoading', false);
-            });
+            .catch(() => { context.commit('updateOrderLoadingFailed', true); })
+            .then(() => { context.commit('updateOrderLoading', false); });
         }, 200);
       },
       loadCart(context) {
@@ -131,9 +127,7 @@ const store = createStore(
               context.commit('updateCartProductsData', response.data.items);
               context.commit('syncCartProduct');
             })
-            .catch(() => {
-              context.commit('updateProductsLoadingFailed', true);
-            })
+            .catch(() => { context.commit('updateProductsLoadingFailed', true); })
             .then(() => { context.commit('updateProductsLoading', false); });
         }, 200);
       },

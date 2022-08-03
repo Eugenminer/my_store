@@ -141,6 +141,8 @@
               <div v-show="!productsAdding">В корзину</div>
             </button>
           </div>
+          <div v-show="productsAdded">Товар добавлен в корзину</div>
+          <div v-show="productsAdding">Добавляем товар в корзину...</div>
         </form>
       </div>
     </div>
