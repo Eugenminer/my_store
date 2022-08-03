@@ -1,9 +1,5 @@
 <template>
-<<<<<<< HEAD
 <main class="content container" v-if="this.$store.getters.stateLoadingOrder === 'ready'">
-=======
-<main class="content container">
->>>>>>> 29221336c2451a9ba407f5b3b761ae1c813270db
   <div class="content__top">
     <ul class="breadcrumbs">
       <li class="breadcrumbs__item">
@@ -87,25 +83,18 @@
     </form>
   </section>
 </main>
-<<<<<<< HEAD
 <main class="content container" v-else>
   <PreLoader :state="this.$store.getters.stateLoadingOrder"/>
 </main>
-=======
->>>>>>> 29221336c2451a9ba407f5b3b761ae1c813270db
 </template>
 
 <script>
 import OrderBill from '@/components/OrderBill.vue';
-<<<<<<< HEAD
 import PreLoader from '@/components/PreLoader.vue';
-=======
->>>>>>> 29221336c2451a9ba407f5b3b761ae1c813270db
 
 export default {
   components: {
     OrderBill,
-<<<<<<< HEAD
     PreLoader,
   },
   methods: {
@@ -118,14 +107,6 @@ export default {
   },
   created() {
     this.loadOrder();
-=======
-  },
-  created() {
-    if (this.$store.state.orderInfo && this.$store.state.orderInfo.id === this.$route.params.id) {
-      return;
-    }
-    this.$store.dispatch('loadOrderInfo', this.$route.params.id);
->>>>>>> 29221336c2451a9ba407f5b3b761ae1c813270db
   },
 };
 </script>
