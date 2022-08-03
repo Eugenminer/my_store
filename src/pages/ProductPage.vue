@@ -1,5 +1,10 @@
 <template>
-<main class="content container">
+<main class="content container" v-if="stateLoading !== 'ready'">
+  <section class="item">
+    <PreLoader :state="stateLoading" @reload="loadProduct" />
+  </section>
+</main>
+<main class="content container" v-else>
   <div class="content__top">
     <ul class="breadcrumbs">
       <li class="breadcrumbs__item">
@@ -129,26 +134,11 @@
           </fieldset>
 
           <div class="item__row">
-            <div class="form__counter">
-              <button type="button" aria-label="Убрать один товар" @click="productAmount--">
-                <svg width="12" height="12" fill="currentColor">
-                  <use xlink:href="#icon-minus"></use>
-                </svg>
-              </button>
+            <AmountProduct size="12" v-model:amount="productAmount" />
 
-              <label for="amount">
-                <input id="amount" type="text" v-model="productAmount" name="count">
-              </label>
-
-              <button type="button" aria-label="Добавить один товар" @click="productAmount++">
-                <svg width="12" height="12" fill="currentColor">
-                  <use xlink:href="#icon-plus"></use>
-                </svg>
-              </button>
-            </div>
-
-            <button class="button button--primery" type="submit">
-              В корзину
+            <button class="button button--primery" type="submit" :disabled="productsAdding">
+              <PreLoader :state="productsAdding ? 'loading' : 'ready'" type="button" />
+              <div v-show="!productsAdding">В корзину</div>
             </button>
           </div>
         </form>
@@ -226,33 +216,78 @@
 </template>
 
 <script>
-import products from '@/data/Products';
-import categories from '@/data/Categories';
+import PreLoader from '@/components/PreLoader.vue';
+import AmountProduct from '@/components/AmountProduct.vue';
 import numberFormat from '@/helpers/numberFormat';
+import { mapActions } from 'vuex';
+import axios from 'axios';
+import API_BASE_URL from '@/config';
 
 export default {
+  components: {
+    PreLoader,
+    AmountProduct,
+  },
   data() {
     return {
       productAmount: 1,
+      productData: null,
+      productsLoading: false,
+      productsLoadingFailed: false,
+      productsAdded: false,
+      productsAdding: false,
     };
   },
   computed: {
+    stateLoading() {
+      if (this.productsLoadingFailed) return 'error';
+      if (this.productsLoading) return 'loading';
+      return 'ready';
+    },
     product() {
-      return products.find((el) => el.id === +this.$route.params.id);
+      return this.productData ? {
+        ...this.productData,
+        image: this.productData.image.file.url,
+      } : [];
     },
     category() {
-      return categories.find((el) => el.id === this.product.categoryId);
+      return this.productData ? this.productData.category : [];
     },
     formatPrice() {
       return numberFormat(this.product.price);
     },
   },
   methods: {
+    ...mapActions(['addProductToCart']),
     AddToCart() {
-      this.$store.commit(
-        'addProductToCart',
-        { productId: this.product.id, amount: this.productAmount },
-      );
+      this.productsAdded = false;
+      this.productsAdding = true;
+
+      this.loadProductTimer = setTimeout(() => {
+        this.addProductToCart({ productId: this.product.id, amount: this.productAmount })
+          .then(() => { this.productsAdding = false; this.productsAdded = true; });
+      }, 200);
+    },
+    loadProduct() {
+      if (!this.$route.params.id) return;
+      this.productsLoading = true;
+      this.productsLoadingFailed = false;
+      clearTimeout(this.loadProductTimer);
+      this.loadProductTimer = setTimeout(() => {
+        axios
+          .get(`${API_BASE_URL}/api/products/${this.$route.params.id}`)
+          .then((response) => { this.productData = response.data; })
+          .catch(() => { this.productsLoadingFailed = true; })
+          .then(() => { this.productsLoading = false; });
+      }, 200);
+    },
+  },
+  watch: {
+    '$route.params.id': {
+      handler() {
+        this.loadProduct();
+      },
+      immediate: true,
     },
   },
 };

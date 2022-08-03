@@ -1,5 +1,8 @@
 <template>
-<main class="content container">
+<main class="content container" v-if="stateLoadingCart !== 'ready'">
+  <PreLoader :state="stateLoadingCart" @reload="loadCart" />
+</main>
+<main class="content container" v-else>
   <div class="content__top">
     <ul class="breadcrumbs">
       <li class="breadcrumbs__item">
@@ -17,8 +20,11 @@
     <h1 class="content__title">
       Корзина
     </h1>
-    <span class="content__info">
-    {{ $store.getters.cartDetailProducts.length }} товара
+    <span class="content__info" v-if="$store.getters.cartDetailProducts.length > 0">
+      {{ $store.getters.cartDetailProducts.length }} товара
+    </span>
+    <span class="content__info" v-else>
+      Ваша корзина пуста
     </span>
   </div>
 
@@ -38,10 +44,11 @@
         <p class="cart__price">
           Итого: <span>{{ formatPrice(totalPrice) }} ₽</span>
         </p>
-
-        <button class="cart__button button button--primery" type="submit">
-          Оформить заказ
-        </button>
+        <router-link :to="{name: 'order'}" v-if="$store.getters.cartDetailProducts.length > 0">
+          <button class="cart__button button button--primery" type="submit">
+            Оформить заказ
+          </button>
+        </router-link>
       </div>
     </form>
   </section>
@@ -49,21 +56,28 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import CartItem from '@/components/CartItem.vue';
 import numberFormat from '@/helpers/numberFormat';
+import PreLoader from '@/components/PreLoader.vue';
 
 export default {
   components: {
     CartItem,
+    PreLoader,
   },
   methods: {
+    ...mapActions(['loadCart']),
     formatPrice(price) {
       return numberFormat(price);
     },
   },
   computed: {
-    ...mapGetters({ products: 'cartDetailProducts', totalPrice: 'cartTotalPrice' }),
+    ...mapGetters({
+      products: 'cartDetailProducts',
+      totalPrice: 'cartTotalPrice',
+      stateLoadingCart: 'stateLoadingCart',
+    }),
   },
 };
 </script>

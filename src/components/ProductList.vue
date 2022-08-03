@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import ProductItem from './ProductItem.vue';
-import BasePagination from './BasePagination.vue';
+import ProductItem from '@/components/ProductItem.vue';
+import BasePagination from '@/components/BasePagination.vue';
 
 export default {
   name: 'ProductList',

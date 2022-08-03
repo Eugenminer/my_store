@@ -13,7 +13,9 @@
     <ProductSearch v-model:category-id="filterCategoryId" v-model:price-from="filterPriceFrom"
         v-model:price-to="filterPriceTo" v-model:color-id="filterColorId" />
     <ProductList :products="products" v-model:page="page"
-      :count="countProducts" :perPages="productNumOnPage" />
+      :count="countProducts" :perPages="productNumOnPage"
+      v-if="stateLoading === 'ready'" />
+      <PreLoader v-else :state="stateLoading" @reload="loadProducts"/>
   </div>
 </main>
 </template>
@@ -21,29 +23,31 @@
 <script>
 import ProductList from '@/components/ProductList.vue';
 import ProductSearch from '@/components/ProductSearch.vue';
-import products from '@/data/Products';
-import categories from '@/data/Categories';
+import PreLoader from '@/components/PreLoader.vue';
+import axios from 'axios';
+import API_BASE_URL from '@/config';
 
 export default {
   components: {
     ProductList,
     ProductSearch,
+    PreLoader,
   },
   watch: {
-    filterColorId() {
-      this.page = 1;
-    },
-    filterCategoryId() {
-      this.page = 1;
+    page() {
+      this.loadProducts();
     },
     filterPriceFrom() {
-      this.page = 1;
+      this.loadProducts();
     },
     filterPriceTo() {
-      this.page = 1;
+      this.loadProducts();
     },
-    productNumOnPage() {
-      this.page = 1;
+    filterCategoryId() {
+      this.loadProducts();
+    },
+    filterColorId() {
+      this.loadProducts();
     },
   },
   data() {
@@ -54,45 +58,29 @@ export default {
       filterColorId: 0,
       page: 1,
       productNumOnPage: 3,
+      productsData: null,
+      productsLoading: false,
+      productsLoadingFailed: false,
     };
   },
   computed: {
-    filterProducts() {
-      let result = products;
-
-      if (this.filterPriceFrom) {
-        result = result.filter((p) => p.price >= this.filterPriceFrom);
-      }
-
-      if (this.filterPriceTo) {
-        result = result.filter((p) => p.price <= this.filterPriceTo);
-      }
-
-      if (this.filterCategoryId) {
-        result = result.filter((p) => p.categoryId === this.filterCategoryId);
-      }
-
-      if (this.filterColorId > 0) {
-        result = result.filter((p) => p.colors.find((el) => el.id === this.filterColorId)
-          !== undefined);
-      }
-
-      return result;
+    stateLoading() {
+      if (this.productsLoadingFailed) return 'error';
+      if (this.productsLoading) return 'loading';
+      return 'ready';
     },
     countProducts() {
-      return this.filterProducts.length;
-    },
-    categories() {
-      return categories;
+      return this.productsData ? this.productsData.pagination.total : 0;
     },
     products() {
-      const end = this.productNumOnPage * this.page;
-      const begin = end - this.productNumOnPage;
-      return this.filterProducts.slice(begin, end);
+      return this.productsData ? this.productsData.items.map((product) => ({
+        ...product,
+        image: product.image.file.url,
+      })) : [];
     },
     stringNumProducts() {
-      let str = String(products.length);
-      let temp = (products.length + 56434) % 100;
+      let str = String(this.countProducts);
+      let temp = this.countProducts % 100;
       if (temp > 10 && temp < 15) {
         temp = 10;
       }
@@ -106,6 +94,32 @@ export default {
       }
       return str;
     },
+  },
+  methods: {
+    loadProducts() {
+      this.productsLoading = true;
+      this.productsLoadingFailed = false;
+      clearTimeout(this.loadProductTimer);
+      this.loadProductTimer = setTimeout(() => {
+        axios
+          .get(`${API_BASE_URL}/api/products`, {
+            params: {
+              page: this.page,
+              limit: this.productNumOnPage,
+              categoryId: this.filterCategoryId,
+              colorId: this.filterColorId,
+              minPrice: this.filterPriceFrom,
+              maxPrice: this.filterPriceTo,
+            },
+          })
+          .then((response) => { this.productsData = response.data; })
+          .catch(() => { this.productsLoadingFailed = true; })
+          .then(() => { this.productsLoading = false; });
+      }, 200);
+    },
+  },
+  created() {
+    this.loadProducts();
   },
 };
 </script>
