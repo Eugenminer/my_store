@@ -11,7 +11,8 @@
 
   <div class="content__catalog">
     <ProductSearch v-model:category-id="filterCategoryId" v-model:price-from="filterPriceFrom"
-        v-model:price-to="filterPriceTo" v-model:color-id="filterColorId" />
+        v-model:price-to="filterPriceTo" v-model:category-props="filterCategoryProps"
+        @applyFilter="loadProducts" />
     <ProductList :products="products" v-model:page="page"
       :count="countProducts" :perPages="productNumOnPage"
       v-if="stateLoading === 'ready'" />
@@ -26,6 +27,7 @@ import ProductSearch from '@/components/ProductSearch.vue';
 import PreLoader from '@/components/PreLoader.vue';
 import axios from 'axios';
 import API_BASE_URL from '@/config';
+import qs from 'qs';
 
 export default {
   components: {
@@ -37,27 +39,15 @@ export default {
     page() {
       this.loadProducts();
     },
-    filterPriceFrom() {
-      this.loadProducts();
-    },
-    filterPriceTo() {
-      this.loadProducts();
-    },
-    filterCategoryId() {
-      this.loadProducts();
-    },
-    filterColorId() {
-      this.loadProducts();
-    },
   },
   data() {
     return {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: 0,
-      filterColorId: 0,
+      filterCategoryProps: {},
       page: 1,
-      productNumOnPage: 3,
+      productNumOnPage: 12,
       productsData: null,
       productsLoading: false,
       productsLoadingFailed: false,
@@ -75,7 +65,7 @@ export default {
     products() {
       return this.productsData ? this.productsData.items.map((product) => ({
         ...product,
-        image: product.image.file.url,
+        image: product.preview.file.url,
       })) : [];
     },
     stringNumProducts() {
@@ -99,23 +89,24 @@ export default {
     loadProducts() {
       this.productsLoading = true;
       this.productsLoadingFailed = false;
-      clearTimeout(this.loadProductTimer);
-      this.loadProductTimer = setTimeout(() => {
-        axios
-          .get(`${API_BASE_URL}/api/products`, {
-            params: {
-              page: this.page,
-              limit: this.productNumOnPage,
-              categoryId: this.filterCategoryId,
-              colorId: this.filterColorId,
-              minPrice: this.filterPriceFrom,
-              maxPrice: this.filterPriceTo,
-            },
-          })
-          .then((response) => { this.productsData = response.data; })
-          .catch(() => { this.productsLoadingFailed = true; })
-          .then(() => { this.productsLoading = false; });
-      }, 200);
+      axios
+        .get(`${API_BASE_URL}/api/products`, {
+          params: {
+            page: this.page,
+            limit: this.productNumOnPage,
+            categoryId: this.filterCategoryId,
+            props: this.filterCategoryProps,
+            minPrice: this.filterPriceFrom === 0 ? undefined : this.filterPriceFrom,
+            maxPrice: this.filterPriceTo === 0 ? undefined : this.filterPriceTo,
+          },
+          paramsSerializer: (params) => qs.stringify(params, {
+            arrayFormat: 'brackets',
+            encode: false,
+          }),
+        })
+        .then((response) => { this.productsData = response.data; })
+        .catch(() => { this.productsLoadingFailed = true; })
+        .then(() => { this.productsLoading = false; });
     },
   },
   created() {

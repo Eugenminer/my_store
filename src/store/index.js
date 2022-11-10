@@ -6,20 +6,24 @@ const store = createStore(
   {
     state() {
       return {
-        cartProducts: [],
+        cartItems: [],
         userAccessKey: null,
-        cartProductsData: [],
+        cartItemsData: [],
         orderInfo: null,
         productsLoading: false,
         productsLoadingFailed: false,
         orderLoading: false,
         orderLoadingFailed: false,
+        colors: [],
       };
     },
     mutations: {
       resetCart(state) {
-        state.cartProducts = [];
-        state.cartProductsData = [];
+        state.cartItems = [];
+        state.cartItemsData = [];
+      },
+      updateColors(state, colors) {
+        state.colors = colors.items;
       },
       updateOrderInfo(state, orderInfo) {
         state.orderInfo = orderInfo;
@@ -37,46 +41,41 @@ const store = createStore(
         state.orderLoadingFailed = value;
       },
       changeAmountProduct(state, { productId, amount }) {
-        const item = state.cartProducts.find((el) => el.productId === productId);
+        const item = state.cartItems.find((el) => el.itemId === productId);
         item.amount = amount;
       },
       deleteProductFromCart(state, productId) {
-        state.cartProducts = state.cartProducts.filter((el) => el.productId !== productId);
+        state.cartItems = state.cartItems.filter((el) => el.itemId !== productId);
       },
-      updateCartProductsData(state, productsData) {
-        state.cartProductsData = productsData;
+      updateCartItemsData(state, productsData) {
+        state.cartItemsData = productsData;
       },
       updateUserAccessKey(state, userAccessKey) {
         state.userAccessKey = userAccessKey;
       },
-      syncCartProduct(state) {
-        state.cartProducts = state.cartProductsData.map((item) => ({
-          productId: item.product.id,
-          amount: item.quantity,
+      syncCartItem(state) {
+        state.cartItems = state.cartItemsData.map((item) => ({
+          itemId: item.id,
+          quantity: item.quantity,
         }));
       },
     },
     getters:
     {
-      cartDetailProducts(state) {
-        const products = state.cartProducts.map((item) => ({
-          ...item,
-          product: state.cartProductsData.find(
-            (p) => p.product.id === item.productId,
-          ).product,
-        }));
-
-        return products.map((item) => ({
-          ...item,
-          product: {
-            ...item.product,
-            image: item.product.image.file.url,
-          },
-        }));
+      colors(state) {
+        return state.colors;
+      },
+      cartDetailItems(state) {
+        return state.cartItemsData;
+      },
+      cartItemsCount(state) {
+        let count = 0;
+        state.cartItems.forEach((item) => { count += item.quantity; });
+        return count;
       },
       cartTotalPrice(state, getters) {
-        const prods = getters.cartDetailProducts;
-        return prods.reduce((acc, item) => (item.product.price * item.amount) + acc, 0);
+        const prods = getters.cartDetailItems;
+        return prods.reduce((acc, item) => (item.price * item.quantity) + acc, 0);
       },
       stateLoadingCart(state) {
         if (state.productsLoadingFailed) return 'error';
@@ -108,6 +107,13 @@ const store = createStore(
             .then(() => { context.commit('updateOrderLoading', false); });
         }, 200);
       },
+      loadColors(context) {
+        axios
+          .get(`${API_BASE_URL}/api/colors`)
+          .then((response) => {
+            context.commit('updateColors', response.data);
+          });
+      },
       loadCart(context) {
         context.commit('updateProductsLoading', true);
         context.commit('updateProductsLoadingFailed', false);
@@ -124,18 +130,19 @@ const store = createStore(
                 localStorage.setItem('userAccessKey', response.data.user.accessKey);
                 context.commit('updateUserAccessKey', response.data.user.accessKey);
               }
-              context.commit('updateCartProductsData', response.data.items);
-              context.commit('syncCartProduct');
+              context.commit('updateCartItemsData', response.data.items);
+              context.commit('syncCartItem');
             })
             .catch(() => { context.commit('updateProductsLoadingFailed', true); })
             .then(() => { context.commit('updateProductsLoading', false); });
         }, 200);
       },
-      addProductToCart(context, { productId, amount }) {
+      addProductToCart(context, { productOfferId, colorId, quantity }) {
         return axios
           .post(`${API_BASE_URL}/api/baskets/products`, {
-            productId,
-            quantity: amount,
+            productOfferId,
+            colorId,
+            quantity,
           }, {
             params: {
               userAccessKey: context.state.userAccessKey,
@@ -146,9 +153,10 @@ const store = createStore(
               localStorage.setItem('userAccessKey', response.data.user.accessKey);
               context.commit('updateUserAccessKey', response.data.user.accessKey);
             }
-            context.commit('updateCartProductsData', response.data.items);
-            context.commit('syncCartProduct');
-          });
+            context.commit('updateCartItemsData', response.data.items);
+            context.commit('syncCartItem');
+          })
+          .catch(() => { console.log([productOfferId, colorId, quantity]); });
       },
       updateProductToCart(context, { productId, amount }) {
         if (amount < 1) return {};
@@ -157,7 +165,7 @@ const store = createStore(
 
         return axios
           .put(`${API_BASE_URL}/api/baskets/products`, {
-            productId,
+            basketItemId: productId,
             quantity: amount,
           }, {
             params: {
@@ -165,28 +173,29 @@ const store = createStore(
             },
           })
           .then((response) => {
-            context.commit('updateCartProductsData', response.data.items);
+            context.commit('updateCartItemsData', response.data.items);
+            context.commit('syncCartItem');
           })
-          .catch(() => { context.commit('syncCartProduct'); });
+          .catch(() => { context.commit('syncCartItem'); });
       },
       deleteProductFromCart(context, productId) {
         context.commit('deleteProductFromCart', productId);
 
-        const url = 'https://vue-study.skillbox.cc/api/baskets/products';
-        // `${API_BASE_URL}/api/baskets/products`
+        const url = `${API_BASE_URL}/api/baskets/products`;
+        //
         return axios
           .delete(url, {
             params: {
               userAccessKey: context.state.userAccessKey,
             },
             data: {
-              productId,
+              basketItemId: productId,
             },
           })
           .then((response) => {
-            context.commit('updateCartProductsData', response.data.items);
+            context.commit('updateCartItemsData', response.data.items);
           })
-          .catch(() => { context.commit('syncCartProduct'); });
+          .catch(() => { context.commit('syncCartItem'); });
       },
     },
   },

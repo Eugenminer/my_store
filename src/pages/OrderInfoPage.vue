@@ -31,7 +31,10 @@
           Благодарим за&nbsp;выбор нашего магазина. На&nbsp;
           Вашу почту придет письмо с&nbsp;деталями заказа.
           Наши менеджеры свяжутся с&nbsp;Вами в&nbsp;
-          течение часа для уточнения деталей доставки.
+          течение часа
+          <span v-if="this.$store.state.orderInfo.deliveryType.id == 2">
+           &nbsp;для уточнения деталей доставки
+          </span>.
         </p>
 
         <ul class="dictionary">
@@ -72,14 +75,16 @@
               Способ оплаты
             </span>
             <span class="dictionary__value">
-              картой при получении
+              {{ this.$store.state.orderInfo.paymentType }}
             </span>
           </li>
         </ul>
       </div>
-
-      <OrderBill :deliveryCost="0" :products="this.$store.state.orderInfo.basket.items"/>
-
+      <OrderBill :deliveryCost="this.$store.state.orderInfo.deliveryType.price"
+      :items="this.$store.state.orderInfo.basket.items" />
+      <span class="dictionary__key">
+        {{ this.$store.state.orderInfo.status.title }}
+      </span>
     </form>
   </section>
 </main>

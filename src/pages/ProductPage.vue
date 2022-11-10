@@ -32,26 +32,8 @@
          :alt="product.title">
       </div>
       <ul class="pics__list">
-        <li class="pics__item">
-          <a href="" class="pics__link pics__link--current">
-            <img width="98" height="98" :src="product.image"
-            :alt="product.title">
-          </a>
-        </li>
-        <li class="pics__item">
-          <a href="" class="pics__link">
-            <img width="98" height="98" :src="product.image"
-            :alt="product.title">
-          </a>
-        </li>
-        <li class="pics__item">
-          <a href="" class="pics__link">
-            <img width="98" height="98" :src="product.image"
-            :alt="product.title">
-          </a>
-        </li>
-        <li class="pics__item">
-          <a class="pics__link" href="#">
+        <li class="pics__item" v-for="index in 4" :key="'pic'+index">
+          <a href="" class="pics__link pics__link--current" :id="'pic'+index">
             <img width="98" height="98" :src="product.image"
             :alt="product.title">
           </a>
@@ -73,66 +55,42 @@
           <fieldset class="form__block">
             <legend class="form__legend">Цвет:</legend>
             <ul class="colors">
-              <li class="colors__item">
-                <label for="#" class="colors__label">
+              <li class="colors__item" v-for="(color, index) in product.colors"
+                :key="'color' + index">
+                <label :for="'color' + index" class="colors__label">
                   <input class="colors__radio sr-only" type="radio"
-                    name="color-item" value="blue" checked="">
-                  <span class="colors__value" style="background-color: #73B6EA;">
-                  </span>
+                    name="color-item" :value="color.color.id" v-model="currentColorId"
+                    :id="'color' + index" :checked="index === 0" />
+                  <span class="colors__value"
+                  :style="{ 'background-color': color.color.code }" />
                 </label>
-              </li>
-              <li class="colors__item">
-                <label for="#" class="colors__label">
-                  <input class="colors__radio sr-only" type="radio"
-                    name="color-item" value="yellow">
-                  <span class="colors__value" style="background-color: #FFBE15;">
-                  </span>
-                </label>
-              </li>
-              <li class="colors__item">
-                <label for="#" class="colors__label">
-                  <input class="colors__radio sr-only" type="radio"
-                    name="color-item" value="gray">
-                  <span class="colors__value" style="background-color: #939393;">
-                </span></label>
               </li>
             </ul>
           </fieldset>
-
-          <fieldset class="form__block">
-            <legend class="form__legend">Объемб в ГБ:</legend>
-
+          <fieldset class="form__block" v-for="(props, key) in existPropertyList"
+          :key="'props' + key">
+            <legend class="form__legend">
+              {{ props[0].productProp.title }}:
+            </legend>
             <ul class="sizes sizes--primery">
-              <li class="sizes__item">
-                <label for="#" class="sizes__label">
+              <li class="sizes__item" v-for="(prop, index) in props"
+              :key="'value' + prop.value">
+                <label :for="'value' + prop.value" class="sizes__label">
                   <input class="sizes__radio sr-only" type="radio"
-                    name="sizes-item" value="32">
+                    :value="prop.value" :id="'value' + prop.value"
+                    :name="prop.productProp.code"
+                    v-model="currentProductProps[prop.productProp.code]"
+                    :checked="index === 0" @change="changedProductProps()">
                   <span class="sizes__value">
-                    32gb
-                  </span>
-                </label>
-              </li>
-              <li class="sizes__item">
-                <label for="#" class="sizes__label">
-                  <input class="sizes__radio sr-only" type="radio"
-                    name="sizes-item" value="64">
-                  <span class="sizes__value">
-                    64gb
-                  </span>
-                </label>
-              </li>
-              <li class="sizes__item">
-                <label for="#" class="sizes__label">
-                  <input class="sizes__radio sr-only" type="radio"
-                    name="sizes-item" value="128" checked="">
-                  <span class="sizes__value">
-                    128gb
+                    <span class="colors__value" v-if="prop.productProp.code === 'color'"
+                      :style="{ backgroundColor: colorByName(prop.value), float: 'left', }">
+                    </span>
+                    &nbsp;&nbsp;{{ prop.value }}&nbsp;&nbsp;&nbsp;
                   </span>
                 </label>
               </li>
             </ul>
           </fieldset>
-
           <div class="item__row">
             <AmountProduct size="12" v-model:amount="productAmount" />
 
@@ -146,82 +104,17 @@
         </form>
       </div>
     </div>
-
-    <div class="item__desc">
-      <ul class="tabs">
-        <li class="tabs__item">
-          <a class="tabs__link tabs__link--current">
-            Описание
-          </a>
-        </li>
-        <li class="tabs__item">
-          <a class="tabs__link" href="#">
-            Характеристики
-          </a>
-        </li>
-        <li class="tabs__item">
-          <a class="tabs__link" href="#">
-            Гарантия
-          </a>
-        </li>
-        <li class="tabs__item">
-          <a class="tabs__link" href="#">
-            Оплата и доставка
-          </a>
-        </li>
-      </ul>
-
-      <div class="item__content">
-        <p>
-          Навигация GPS, ГЛОНАСС, BEIDOU Galileo и QZSS<br>
-          Синхронизация со смартфоном<br>
-          Связь по Bluetooth Smart, ANT+ и Wi-Fi<br>
-          Поддержка сторонних приложений<br>
-        </p>
-
-        <a href="#">
-          Все характеристики
-        </a>
-
-        <h3>Что это?</h3>
-
-        <p>
-          Wahoo ELEMNT BOLT GPS – это велокомпьютер, который позволяет оптимизировать
-            свои велотренировки, сделав их максимально эффективными. Wahoo ELEMNT BOLT GPS
-            синхронизируется с датчиками по ANT+, объединяя полученную с них информацию.
-            Данные отображаются на дисплее, а также сохраняются на смартфоне.
-            При этом на мобильное устройство можно установить как фирменное приложение,
-            так и различные приложения сторонних разработчиков.
-            Велокомпьютер точно отслеживает местоположение, принимая сигнал с целого
-            комплекса спутников. Эта информация позволяет смотреть уже преодоленные
-            маршруты и планировать новые велопрогулки.
-        </p>
-
-        <h3>Дизайн</h3>
-
-        <p>
-          Велокомпьютер Wahoo ELEMNT BOLT очень компактный. Размеры устройства
-          составляют всего 74,6 x 47,3 x 22,1 мм. что не превышает габариты смартфона.
-          Корпус гаджета выполнен из черного пластика. На обращенной к пользователю
-          стороне расположен дисплей диагональю 56 мм. На дисплей выводятся координаты
-          и скорость, а также полученная со смартфона и синхронизированных датчиков
-          информация: интенсивность, скорость вращения педалей, пульс и т.д.
-          (датчики не входят в комплект поставки). Корпус велокомпьютера имеет степень
-          защиты от влаги IPX7. Это означает, что устройство не боится пыли, а
-          также выдерживает кратковременное (до 30 минут) погружение в воду на
-          глубину не более 1 метра.
-        </p>
-      </div>
-    </div>
+    <ProductPageInfo :product="product"/>
   </section>
 </main>
 </template>
 
 <script>
 import PreLoader from '@/components/PreLoader.vue';
+import ProductPageInfo from '@/components/ProductPageInfo.vue';
 import AmountProduct from '@/components/AmountProduct.vue';
 import numberFormat from '@/helpers/numberFormat';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import axios from 'axios';
 import API_BASE_URL from '@/config';
 
@@ -229,18 +122,26 @@ export default {
   components: {
     PreLoader,
     AmountProduct,
+    ProductPageInfo,
   },
   data() {
     return {
       productAmount: 1,
       productData: null,
+      categoryData: null,
       productsLoading: false,
       productsLoadingFailed: false,
       productsAdded: false,
       productsAdding: false,
+      currentColorId: null,
+      currentProductProps: {},
+      existPropertyList: {},
+      currentOfferId: null,
+      currentOfferPrice: null,
     };
   },
   computed: {
+    ...mapGetters({ colors: 'colors' }),
     stateLoading() {
       if (this.productsLoadingFailed) return 'error';
       if (this.productsLoading) return 'loading';
@@ -249,26 +150,34 @@ export default {
     product() {
       return this.productData ? {
         ...this.productData,
-        image: this.productData.image.file.url,
+        image: this.productData.preview.file.url,
       } : [];
     },
     category() {
-      return this.productData ? this.productData.category : [];
+      return this.productData.category ? this.productData.category : [];
     },
     formatPrice() {
-      return numberFormat(this.product.price);
+      return numberFormat(this.currentOfferPrice);
     },
   },
   methods: {
-    ...mapActions(['addProductToCart']),
+    ...mapActions(['addProductToCart', 'loadColors']),
     AddToCart() {
       this.productsAdded = false;
       this.productsAdding = true;
 
       this.loadProductTimer = setTimeout(() => {
-        this.addProductToCart({ productId: this.product.id, amount: this.productAmount })
+        this.addProductToCart({
+          productOfferId: this.currentOfferId,
+          colorId: this.currentColorId,
+          quantity: this.productAmount,
+        })
           .then(() => { this.productsAdding = false; this.productsAdded = true; });
       }, 200);
+    },
+    colorByName(value) {
+      const color = this.colors.find((el) => el.title.replace('ё', 'е') === value.replace('ё', 'е'));
+      return color.code;
     },
     loadProduct() {
       if (!this.$route.params.id) return;
@@ -283,6 +192,33 @@ export default {
           .then(() => { this.productsLoading = false; });
       }, 200);
     },
+    loadPropertyProduct(product) {
+      product.offers.forEach((offer) => {
+        offer.propValues.forEach((prop) => {
+          if (this.existPropertyList[prop.productProp.code] === undefined) {
+            this.existPropertyList[prop.productProp.code] = [];
+          }
+          this.existPropertyList[prop.productProp.code].push(prop);
+        });
+      });
+      this.currentOfferId = product.offers[0].id;
+      this.currentOfferPrice = product.offers[0].price;
+      this.currentColorId = product.colors[0].color.id;
+    },
+    changedProductProps() {
+      const offers = [].concat(this.product.offers);
+      Object.keys(this.currentProductProps).forEach((key) => {
+        offers.forEach((offer, index) => {
+          offer.propValues.forEach((prop) => {
+            if (prop.productProp.code === key && prop.value !== this.currentProductProps[key]) {
+              offers.splice(index, 1);
+            }
+          });
+        });
+      });
+      this.currentOfferId = offers[0].id;
+      this.currentOfferPrice = offers[0].price;
+    },
   },
   watch: {
     '$route.params.id': {
@@ -291,6 +227,12 @@ export default {
       },
       immediate: true,
     },
+    productData(value) {
+      this.loadPropertyProduct(value);
+    },
+  },
+  created() {
+    this.loadColors();
   },
 };
 </script>

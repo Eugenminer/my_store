@@ -2,16 +2,16 @@
 <main class="content container">
   <div class="content__top">
     <ul class="breadcrumbs">
-      <li class="breadcrumbs__item">
-        <a class="breadcrumbs__link" href="index.html">
-          Каталог
-        </a>
-      </li>
-      <li class="breadcrumbs__item">
-        <a class="breadcrumbs__link" href="cart.html">
-          Корзина
-        </a>
-      </li>
+    <li class="breadcrumbs__item">
+      <router-link class="breadcrumbs__link" :to="{ name: 'main' }">
+        Каталог
+      </router-link>
+    </li>
+    <li class="breadcrumbs__item">
+      <router-link class="breadcrumbs__link" :to="{ name: 'cart' }">
+        Корзина
+      </router-link>
+    </li>
       <li class="breadcrumbs__item">
         <a class="breadcrumbs__link">
           Оформление заказа
@@ -23,7 +23,7 @@
       Корзина
     </h1>
     <span class="content__info">
-      {{ this.$store.state.cartProductsData.length }} товара
+      {{ $store.getters.cartItemsCount}} товара
     </span>
   </div>
 
@@ -50,53 +50,37 @@
         <div class="cart__options">
           <h3 class="cart__title">Доставка</h3>
           <ul class="cart__options options">
-            <li class="options__item">
-              <label class="options__label" for="deliveryPickup">
+            <li class="options__item" v-for="(delivery, index) in deliveries"
+            :key="'deleviry' + delivery.id">
+              <label class="options__label" :for="'deleviry' + delivery.id">
                 <input class="options__radio sr-only" type="radio"
-                  name="delivery" id="deliveryPickup" value="0"
-                  v-model="deliveryCost" checked="">
+                  name="delivery" :id="'deleviry' + delivery.id" :value="delivery"
+                  v-model="deliveryItem" :checked="index == 0">
                 <span class="options__value">
-                  Самовывоз <b>бесплатно</b>
-                </span>
-              </label>
-            </li>
-            <li class="options__item">
-              <label class="options__label" for="deliveryCourier">
-                <input class="options__radio sr-only" type="radio"
-                  name="delivery" id="deliveryCourier" v-model="deliveryCost" value="500">
-                <span class="options__value">
-                  Курьером <b>500 ₽</b>
+                  {{ delivery.title }}
+                  <b v-if="delivery.price == 0">бесплатно</b>
                 </span>
               </label>
             </li>
           </ul>
           <h3 class="cart__title">Оплата</h3>
           <ul class="cart__options options">
-            <li class="options__item">
-              <label class="options__label" for="payCard">
+            <li class="options__item"
+            v-for="(payType, index) in paymentTypes" :key="'pay'+payType.id">
+              <label class="options__label" :for="'pay'+payType.id">
                 <input class="options__radio sr-only" type="radio" name="pay"
-                  id="payCard" value="card">
+                  :id="'pay'+payType.id" v-model="paymentType" :value="payType"
+                  :checked="index == 0" />
                 <span class="options__value">
-                  Картой при получении
-                </span>
-              </label>
-            </li>
-            <li class="options__item">
-              <label class="options__label" for="payCash">
-                <input class="options__radio sr-only" type="radio" name="pay"
-                  id="payCash" value="cash">
-                <span class="options__value">
-                  Наличными при получении
+                  {{ payType.title }}
                 </span>
               </label>
             </li>
           </ul>
         </div>
       </div>
-
-      <OrderBill :deliveryCost="deliveryCost" :orderSending="orderSending"
-      :products="this.$store.state.cartProductsData"/>
-
+      <OrderBill :deliveryCost="deliveryItem.price" :orderSending="orderSending"
+      :items="this.$store.getters.cartDetailItems" />
       <div class="cart__error form__error-block" v-if="formErrorMessage">
         <h4>Заявка не отправлена!</h4>
         <p>
@@ -125,7 +109,11 @@ export default {
       formError: {},
       formErrorMessage: '',
       orderSending: false,
-      deliveryCost: 0,
+      payType: '',
+      deliveries: [],
+      deliveryItem: {},
+      paymentTypes: [],
+      paymentType: {},
     };
   },
   methods: {
@@ -138,7 +126,11 @@ export default {
         axios
           .post(
             `${API_BASE_URL}/api/orders`,
-            { ...this.formData },
+            {
+              ...this.formData,
+              deliveryTypeId: this.deliveryItem.id,
+              paymentTypeId: this.paymentType.id,
+            },
             {
               params: {
                 userAccessKey: this.$store.state.userAccessKey,
@@ -159,6 +151,34 @@ export default {
           });
       }, 200);
     },
+    loadDelivires() {
+      axios
+        .get(`${API_BASE_URL}/api/deliveries`)
+        .then((response) => {
+          this.deliveries = response.data;
+          this.deliveryItem.id = this.deliveries[0].id;
+          this.deliveryItem.title = this.deliveries[0].title;
+          this.deliveryItem.price = this.deliveries[0].price;
+          this.loadPaymentTypes();
+        });
+    },
+    loadPaymentTypes() {
+      axios
+        .get(`${API_BASE_URL}/api/payments?deliveryTypeId=${this.deliveryItem.id}`)
+        .then((response) => {
+          this.paymentTypes = response.data;
+          this.paymentType.id = this.paymentTypes[0].id;
+          this.paymentType.title = this.paymentTypes[0].title;
+        });
+    },
+  },
+  watch: {
+    deliveryItem() {
+      this.loadPaymentTypes();
+    },
+  },
+  created() {
+    this.loadDelivires();
   },
 };
 </script>

@@ -5,8 +5,8 @@ aria-label="Корзина с товарами" v-if="stateLoadingCart === 'read
     <use xlink:href="#icon-cart"></use>
   </svg>
   <span class="header__count" aria-label="Количество товаров"
-    v-if="$store.state.cartProducts.length > 0">
-    {{ $store.state.cartProducts.length }}
+    v-if="$store.state.cartItems.length > 0">
+    {{ cartItemsCount }}
   </span>
 </router-link>
 <router-link class="header__cart" :to="{ name: 'cart' }"
@@ -27,7 +27,7 @@ export default {
     ...mapActions(['loadCart']),
   },
   computed: {
-    ...mapGetters(['stateLoadingCart']),
+    ...mapGetters(['stateLoadingCart', 'cartItemsCount']),
   },
 };
 </script>

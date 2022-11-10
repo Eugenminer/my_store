@@ -1,17 +1,18 @@
 <template>
 <div class="cart__block">
   <ul class="cart__orders">
-    <li class="cart__order" v-for="item in products" :key="'cartElement' + item.productId">
-      <h3>{{ (item.quantity > 1 ? item.quantity + (' x ') : '') + item.product.title }}</h3>
-      <b>{{ formatPrice(item.product.price * item.quantity) }} ₽</b>
-      <span>Артикул: {{ item.productId }}</span>
+    <li class="cart__order" v-for="item in cartItems" :key="'cartElement' + item.id">
+      <h3>{{ (item.quantity > 1 ? item.quantity + (' x ') : '') +
+      item.productOffer.product.title }}</h3>
+      <b>{{ formatPrice(item.productOffer.price * item.quantity) }} ₽</b>
+      <span>Артикул: {{ item.id }}</span>
     </li>
   </ul>
 
   <div class="cart__total">
     <p>Доставка: <b>{{ formatPrice(deliveryCost) }} ₽</b></p>
     <p>Итого: <b>{{ productsAmount }}</b> товара на сумму <b>
-      {{ formatPrice(totalPrice) }} ₽</b></p>
+      {{ formatPrice(Number(totalPrice) + Number(deliveryCost)) }} ₽</b></p>
   </div>
 
   <button class="cart__button button button--primery" type="submit"
@@ -30,18 +31,23 @@ export default {
   components: {
     PreLoader,
   },
-  props: ['deliveryCost', 'orderSending', 'products'],
+  props: ['deliveryCost', 'orderSending', 'items'],
   methods: {
     formatPrice(price) {
       return numberFormat(price);
     },
   },
   computed: {
+    cartItems() {
+      return this.items;
+    },
     totalPrice() {
-      return this.products.reduce((acc, item) => (item.product.price * item.quantity) + acc, 0);
+      return this.cartItems.reduce((acc, item) => (item.price * item.quantity) + acc, 0);
     },
     productsAmount() {
-      return this.products.length;
+      let count = 0;
+      this.cartItems.forEach((item) => { count += item.quantity; });
+      return count;
     },
   },
 };

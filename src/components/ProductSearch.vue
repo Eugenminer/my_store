@@ -29,49 +29,50 @@
       </label>
     </fieldset>
 
+    <div  v-if="currentCategoryId">
+    <!--
     <fieldset class="form__block">
-      <legend class="form__legend">Цвет</legend>
-      <ul class="colors">
-        <li class="colors__item" v-for="color in colors" :key="'color' + color.id">
-          <label class="colors__label" :for="'color' + color.id">
-            <input class="colors__radio sr-only" type="radio"
-              :id="'color' + color.id" name="color" :value="color.id" v-model="currentColorId">
-            <span class="colors__value"  :style="{ backgroundColor: color.code,}">
+        <legend class="form__legend">Цвет</legend>
+        <ul class="colors">
+          <li class="colors__item" v-for="col in colors" :key="'color' + col.id">
+            <label class="colors__label" :for="'col' + col.id">
+              <input :id="'col' + col.id"
+                class="colors__radio sr-only" type="checkbox" name="color" value="col.id">
+              <span class="colors__value" :style="{ backgroundColor: col.code}">
+            </span></label>
+          </li>
+        </ul>
+     </fieldset>
+     -->
+     <fieldset class="form__block" v-for="prop in categorie.productProps"
+      :key="'productProp' + prop.id">
+      <legend class="form__legend">{{ prop.title }}</legend>
+        <ul class="check-list">
+        <li class="check-list__item"
+          v-for="(val, index) in prop.availableValues" :key="prop.code + index">
+          <label class="check-list__label"
+            :for="prop.code + index">
+            <input :id="prop.code + index" type="checkbox" :value="val.value"
+              class="check-list__check sr-only"
+              @click="checkboxClick(prop.code, val.value)">
+            <span class="check-list__desc">
+              <span class="colors__value" v-if="prop.code === 'color'"
+                :style="{ backgroundColor: colorByName(val.value), float: 'left', }">
+              </span>
+              {{ '&nbsp;' + val.value }}
+              <span>({{ val.productsCount }})</span>
             </span>
           </label>
         </li>
       </ul>
-    </fieldset>
-
-    <fieldset class="form__block">
-      <legend class="form__legend">Объем в ГБ</legend>
-      <ul class="check-list">
-        <li class="check-list__item">
-          <label for="#" class="check-list__label">
-            <input class="check-list__check sr-only" type="checkbox"
-              name="volume" value="8" checked="">
-            <span class="check-list__desc">
-              8
-              <span>(313)</span>
-            </span>
-          </label>
-        </li>
-        <li class="check-list__item">
-          <label for="#" class="check-list__label">
-            <input class="check-list__check sr-only" type="checkbox" name="volume" value="16">
-            <span class="check-list__desc">
-              16
-              <span>(461)</span>
-            </span>
-          </label>
-        </li>
-      </ul>
-    </fieldset>
+     </fieldset>
+    </div>
 
     <button class="filter__submit button button--primery" type="submit">
       Применить
     </button>
-    <button class="filter__reset button button--second" type="reset" @click.prevent="reset">
+    <button class="filter__reset button button--second"
+    type="reset" @click.prevent="reset" v-if="anyParams">
       Сбросить
     </button>
   </form>
@@ -81,18 +82,23 @@
 <script>
 import axios from 'axios';
 import API_BASE_URL from '@/config';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   components: {
 
   },
-  props: ['categoryId', 'priceFrom', 'priceTo', 'colorId'],
+  props: ['categoryId', 'priceFrom', 'priceTo', 'categoryProps'],
   watch: {
-    colorId(value) {
-      this.currentColorId = value;
+    categoryProps(value) {
+      this.currentCategoryProps = value;
     },
     categoryId(value) {
       this.currentCategoryId = value;
+    },
+    currentCategoryId(value) {
+      this.currentCategoryProps = {};
+      this.loadCategorie(value);
     },
     priceFrom(value) {
       this.currentPriceFrom = value;
@@ -104,48 +110,69 @@ export default {
   data() {
     return {
       currentCategoryId: 0,
+      currentCategorie: null,
       currentPriceFrom: 0,
       currentPriceTo: 0,
-      currentColorId: 0,
+      currentCategoryProps: {},
       productCategories: null,
-      productColors: null,
     };
   },
   methods: {
+    ...mapActions(['loadColors']),
     submit() {
       this.$emit('update:categoryId', this.currentCategoryId);
       this.$emit('update:priceFrom', this.currentPriceFrom);
       this.$emit('update:priceTo', this.currentPriceTo);
-      this.$emit('update:colorId', this.currentColorId);
+      this.$emit('update:categoryProps', this.currentCategoryProps);
+
+      this.$emit('applyFilter');
     },
     reset() {
-      this.$emit('update:categoryId', 0);
-      this.$emit('update:priceFrom', 0);
-      this.$emit('update:priceTo', 0);
-      this.$emit('update:colorId', 0);
-
       this.currentCategoryId = 0;
       this.currentPriceFrom = 0;
       this.currentPriceTo = 0;
-      this.currentColorId = 0;
+      this.currentCategoryProps = {};
+
+      this.submit();
+    },
+    checkboxClick(code, value) {
+      if (this.currentCategoryProps[code] === undefined) {
+        this.currentCategoryProps[code] = [];
+      }
+      const index = this.currentCategoryProps[code].indexOf(value);
+      if (index >= 0) {
+        this.currentCategoryProps[code].splice(index, 1);
+      } else {
+        this.currentCategoryProps[code].push(value);
+      }
     },
     loadCategories() {
       axios
         .get(`${API_BASE_URL}/api/productCategories`)
         .then((response) => { this.productCategories = response.data; });
     },
-    loadColors() {
+    loadCategorie(id) {
+      if (id === 0) return;
       axios
-        .get(`${API_BASE_URL}/api/colors`)
-        .then((response) => { this.productColors = response.data; });
+        .get(`${API_BASE_URL}/api/productCategories/${id}`)
+        .then((response) => { this.currentCategorie = response.data; });
+    },
+    colorByName(value) {
+      const color = this.colors.find((el) => el.title.replace('ё', 'е') === value.replace('ё', 'е'));
+      return color.code;
     },
   },
   computed: {
+    ...mapGetters({ colors: 'colors' }),
     categories() {
       return this.productCategories ? this.productCategories.items : [];
     },
-    colors() {
-      return this.productColors ? this.productColors.items : [];
+    categorie() {
+      return this.currentCategorie ? this.currentCategorie : [];
+    },
+    anyParams() {
+      return this.currentPriceFrom > 0 || this.currentPriceTo > 0
+      || this.currentCategoryId > 0;
     },
   },
   created() {

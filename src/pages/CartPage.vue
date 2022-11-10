@@ -20,8 +20,8 @@
     <h1 class="content__title">
       Корзина
     </h1>
-    <span class="content__info" v-if="$store.getters.cartDetailProducts.length > 0">
-      {{ $store.getters.cartDetailProducts.length }} товара
+    <span class="content__info" v-if="$store.getters.cartDetailItems.length > 0">
+      {{ $store.getters.cartItemsCount }} товара
     </span>
     <span class="content__info" v-else>
       Ваша корзина пуста
@@ -32,8 +32,8 @@
     <form class="cart__form form" action="#" method="POST">
       <div class="cart__field">
         <ul class="cart__list">
-          <CartItem :item="item" v-for="item in products"
-            :key="'cartItem' + item.productId"  />
+          <CartItem :item="item" v-for="item in items"
+            :key="'cartItem' + item.id"  />
         </ul>
       </div>
 
@@ -44,7 +44,7 @@
         <p class="cart__price">
           Итого: <span>{{ formatPrice(totalPrice) }} ₽</span>
         </p>
-        <router-link :to="{name: 'order'}" v-if="$store.getters.cartDetailProducts.length > 0">
+        <router-link :to="{name: 'order'}" v-if="$store.getters.cartDetailItems.length > 0">
           <button class="cart__button button button--primery" type="submit">
             Оформить заказ
           </button>
@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      products: 'cartDetailProducts',
+      items: 'cartDetailItems',
       totalPrice: 'cartTotalPrice',
       stateLoadingCart: 'stateLoadingCart',
     }),
