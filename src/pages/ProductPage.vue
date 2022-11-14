@@ -52,7 +52,7 @@
             {{ formatPrice }} ₽
           </b>
 
-          <fieldset class="form__block">
+          <fieldset class="form__block" v-if="product.mainProp.code !== 'color'">
             <legend class="form__legend">Цвет:</legend>
             <ul class="colors">
               <li class="colors__item" v-for="(color, index) in product.colors"
@@ -83,7 +83,7 @@
                     :checked="index === 0" @change="changedProductProps()">
                   <span class="sizes__value">
                     <span class="colors__value" v-if="prop.productProp.code === 'color'"
-                      :style="{ backgroundColor: colorByName(prop.value), float: 'left', }">
+                      :style="{ backgroundColor: colorByName(prop.value).code, float: 'left', }">
                     </span>
                     &nbsp;&nbsp;{{ prop.value }}&nbsp;&nbsp;&nbsp;
                   </span>
@@ -166,10 +166,17 @@ export default {
       this.productsAdded = false;
       this.productsAdding = true;
 
+      let color = this.currentColorId;
+      if (this.productData.mainProp.code === 'color') {
+        const offer = this.productData.offers.find((el) => el.id === this.currentOfferId);
+        const prop = offer.propValues.find((el) => el.productProp.code === 'color');
+        color = this.colorByName(prop.value).id;
+      }
+
       this.loadProductTimer = setTimeout(() => {
         this.addProductToCart({
           productOfferId: this.currentOfferId,
-          colorId: this.currentColorId,
+          colorId: color,
           quantity: this.productAmount,
         })
           .then(() => { this.productsAdding = false; this.productsAdded = true; });
@@ -177,7 +184,7 @@ export default {
     },
     colorByName(value) {
       const color = this.colors.find((el) => el.title.replace('ё', 'е') === value.replace('ё', 'е'));
-      return color.code;
+      return color;
     },
     loadProduct() {
       if (!this.$route.params.id) return;

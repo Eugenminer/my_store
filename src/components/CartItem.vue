@@ -8,17 +8,29 @@
     {{ item.productOffer.product.title }}
   </h3>
   <div class="product__info product__info--color">
-    <div>{{ item.productOffer.product.mainProp.title }}:
+  <div v-if="item.productOffer.product.mainProp.code !== 'color'">
+    <div>Цвет:
       <span>
-        <i  v-if="item.productOffer.product.mainProp.code === 'color'"
-          :style="{ backgroundColor: colorByName(item.productOffer.propValues[0].value) }">
+        <i
+          :style="{ backgroundColor: item.color.color.code }">
         </i>
-        {{ item.productOffer.propValues[0].value }}
+        {{ item.color.color.title }}
       </span>
     </div>
   </div>
+    <div>
+      <div>{{ item.productOffer.product.mainProp.title }}:
+        <span>
+          <i  v-if="item.productOffer.product.mainProp.code === 'color'"
+            :style="{ backgroundColor: colorByName(item.productOffer.propValues[0].value) }">
+          </i>
+          {{ item.productOffer.propValues[0].value }}
+        </span>
+      </div>
+    </div>
+  </div>
   <span class="product__code">
-    Артикул: {{item.productOffer.id}}
+    Артикул: {{item.id}}
   </span>
 
   <AmountProduct size="10" v-model:amount="amountItem" />

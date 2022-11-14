@@ -31,13 +31,13 @@
 
   <ul class="sizes" v-for="(prop, propIndex) in product.offers[0].propValues"
   :key="'prop' + prop.id">
-    <li class="sizes__item" v-for="offer in product.offers" :key="'offer' + offer.id">
+    <li class="sizes__item" v-for="(offer, index) in product.offers" :key="'offer' + offer.id">
       <label :class="prop.productProp.code !== 'color' ? 'sizes__label' : 'colors__label'"
       :for="'offer' + offer.id + 'prop' + offer.propValues[propIndex].value">
         <input :id="'offer' + offer.id + 'prop' +
           offer.propValues[propIndex].value" class="sizes__radio colors__radio sr-only"
           type="radio" :name="offer.propValues[propIndex].productProp.code + product.id"
-          :value="offer.propValues[propIndex].value" />
+          :value="offer.price" v-model="offerprice" :checked="index === 0"/>
         <span class="sizes__value" v-if="prop.productProp.code !== 'color'">
           {{ offer.propValues[propIndex].value }}
         </span>
@@ -59,10 +59,15 @@ export default {
   components: {
 
   },
+  data() {
+    return {
+      offerprice: 0,
+    };
+  },
   props: ['product'],
   computed: {
     formatPrice() {
-      return numberFormat(this.product.price);
+      return numberFormat((this.offerprice === 0 ? this.product.price : this.offerprice));
     },
   },
   methods: {
