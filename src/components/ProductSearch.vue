@@ -30,20 +30,7 @@
     </fieldset>
 
     <div  v-if="currentCategoryId">
-    <!--
-    <fieldset class="form__block">
-        <legend class="form__legend">Цвет</legend>
-        <ul class="colors">
-          <li class="colors__item" v-for="col in colors" :key="'color' + col.id">
-            <label class="colors__label" :for="'col' + col.id">
-              <input :id="'col' + col.id"
-                class="colors__radio sr-only" type="checkbox" name="color" value="col.id">
-              <span class="colors__value" :style="{ backgroundColor: col.code}">
-            </span></label>
-          </li>
-        </ul>
-     </fieldset>
-     -->
+
      <fieldset class="form__block" v-for="prop in categorie.productProps"
       :key="'productProp' + prop.id">
       <legend class="form__legend">{{ prop.title }}</legend>
